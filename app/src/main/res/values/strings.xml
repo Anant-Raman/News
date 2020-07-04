@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">News App</string>
+    <string name="title_headlines">Headlines</string>
+    <string name="title_category">Category</string>
+    <string name="title_search">Search</string>
+    <string name="article_image">Article Image not available</string>
+    <string name="article_description">Article description not available</string>
+    <string name="article_title">Article Title</string>
+    <string name="powered_by_news_api">Powered by News API</string>
+    <string name="source_not_available">Source not available</string>
+    <string name="source">Source :</string>
+    <string name="published_at">Published at :</string>
+    <string name="publish_time_not_available">Publish time not available</string>
+    <string name="save_button">Save Button</string>
+    <string name="saved">Saved</string>
+</resources>

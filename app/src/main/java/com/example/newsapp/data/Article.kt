@@ -1,26 +1,44 @@
 package com.example.news.data
 
+import androidx.annotation.Nullable
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "saved_article_table")
+
 data class Article(
-    @SerializedName("source")
-    val source: Source,
+    @Embedded(prefix = "source")
+    val source: Source?,
+
     @SerializedName("author")
-    val author: Any,
+    val author: String?,
+
+    @PrimaryKey
     @SerializedName("title")
+    @Expose
     val title: String,
+
     @SerializedName("description")
-    val description : Any,
+    @Expose
+    val description : String?,
 
     @SerializedName("url")
-    val url: String,
+    @Expose
+    val url: String?,
 
     @SerializedName("urlToImage")
-    val urlToImage: Any,
+    @Expose
+    val urlToImage: String?,
 
     @SerializedName("publishedAt")
-    val publishedAt: String,
+    @Expose
+    val publishedAt: String?,
 
     @SerializedName("content")
-    val content: Any
+    @Expose
+    val content: String?
 )

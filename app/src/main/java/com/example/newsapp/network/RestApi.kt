@@ -14,6 +14,22 @@ interface RestApi {
         @Query("apiKey") apiKey: String )
             : Call<NewsData>
 
+    
+    @GET("top-headlines")
+    fun getHeadlinesByCategory(
+        @Query("country") country : String,
+        @Query("category") category : String,
+        @Query("apiKey") apiKey: String )
+            : Call<NewsData>
+
+    @GET("everything")
+    fun getHeadSearchResult(
+        @Query("qInTitle") searchKey : String,
+        @Query("sortBy") sortBy : String,
+        @Query("language") language : String,
+        @Query("apiKey") apiKey: String )
+            : Call<NewsData>
+
 //    @GET("/w/api.php")
 //    fun getSearch(
 //        @Query("action") action: String,

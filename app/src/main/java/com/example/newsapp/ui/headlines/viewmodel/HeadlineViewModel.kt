@@ -1,11 +1,13 @@
-package com.example.newsapp.ui.headlines
+package com.example.newsapp.ui.headlines.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.news.data.Article
 import com.example.news.data.NewsData
-import com.example.newsapp.core.Constants
+import com.example.newsapp.core.MainApplication
+import com.example.newsapp.database.ArticleRepository
+import com.example.newsapp.database.ArticleRoomDatabase
 import com.globallogic.sampleapp.framework.network.IViewApiListener
 import com.globallogic.sampleapp.framework.network.RestApiService
 
@@ -13,11 +15,26 @@ class HeadlineViewModel : ViewModel(),IViewApiListener {
 
     var headline: MutableLiveData<NewsData> = MutableLiveData()
     var state : MutableLiveData<String> = MutableLiveData()
+    private val repository: ArticleRepository
+
+    init {
+        val articleDao =
+            ArticleRoomDatabase.getDatabase(MainApplication.applicationContext()).articleDao()
+        repository = ArticleRepository(articleDao)
+    }
 
     fun fetchHeadline() {
         val service = RestApiService()
         service.getHeadlines(this, state)
     }
+
+    fun saveNews(article: Article) {
+        MainApplication.getExecutors()?.diskIO()
+            ?.execute {
+                repository.insert(article)
+            }
+    }
+
 
     override fun notifyViewOnSuccess(`object`: Any?, type: Int) {
         when (type) {

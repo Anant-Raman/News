@@ -1,4 +1,5 @@
-package com.example.news.adapter
+package com.example.newsapp.adapter
+
 
 import android.content.Context
 import android.content.Intent
@@ -19,16 +20,16 @@ import com.example.newsapp.R
 import com.example.newsapp.callbacks.NewsCallbacks
 import com.example.newsapp.ui.webview.WebViewActivity
 
-class NewsArticleAdapter(private val mArticleList: List<Article>,
+class SavedNewsArticleAdapter(private val mArticleList: List<Article>,
                          private val newsCallbacks: NewsCallbacks) :
-    RecyclerView.Adapter<NewsArticleAdapter.ViewHolder>() {
+    RecyclerView.Adapter<SavedNewsArticleAdapter.ViewHolder>() {
 
     private lateinit var mContext: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.context
         return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_article, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_saved_article, parent, false)
         )
     }
 
@@ -53,7 +54,7 @@ class NewsArticleAdapter(private val mArticleList: List<Article>,
             holder.card.setOnClickListener {
                 newsCallbacks.launchNewsWebView(position)
             }
-        holder.btnSave.setOnClickListener {
+        holder.btnDelete.setOnClickListener {
             newsCallbacks.saveArticle(position)
         }
     }
@@ -65,6 +66,6 @@ class NewsArticleAdapter(private val mArticleList: List<Article>,
         val published: TextView = itemView.findViewById(R.id.tv_published)
         val source: TextView = itemView.findViewById(R.id.tv_source)
         val card: CardView = itemView.findViewById(R.id.card_article)
-        val btnSave : ImageButton = itemView.findViewById(R.id.btn_save)
+        val btnDelete : ImageButton = itemView.findViewById(R.id.btn_delete)
     }
 }

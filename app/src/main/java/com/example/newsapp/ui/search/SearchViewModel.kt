@@ -1,13 +1,43 @@
 package com.example.newsapp.ui.search
 
-import androidx.lifecycle.LiveData
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.news.data.Article
+import com.example.news.data.NewsData
+import com.globallogic.sampleapp.framework.network.IViewApiListener
+import com.globallogic.sampleapp.framework.network.RestApiService
 
-class SearchViewModel : ViewModel() {
+class SearchViewModel : ViewModel(),IViewApiListener {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
+    var searchResult: MutableLiveData<NewsData> = MutableLiveData()
+    var state: MutableLiveData<String> = MutableLiveData()
+
+    fun fetchSearchResult(searchKey : String, sortBy : String, language : String) {
+        Log.i("Anant", searchKey)
+        val service = RestApiService()
+        service.getSearchResult(searchKey, sortBy,language,this, state)
     }
-    val text: LiveData<String> = _text
+
+    fun saveNews(article: Article){
+
+
+    }
+
+    override fun notifyViewOnSuccess(`object`: Any?, type: Int) {
+        when (type) {
+            0 -> {
+                val response: NewsData = `object` as NewsData
+                searchResult.postValue(response)
+            }
+        }
+    }
+
+    override fun notifyViewOnFailure(`object`: Any?, type: Int) {
+        when (type) {
+            0 -> {
+                searchResult.postValue(null)
+            }
+        }
+    }
 }

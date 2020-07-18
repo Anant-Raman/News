@@ -12,5 +12,8 @@
     <string name="published_at">Published at :</string>
     <string name="publish_time_not_available">Publish time not available</string>
     <string name="save_button">Save Button</string>
+    <string name="delete_button">Delete Button</string>
     <string name="saved">Saved</string>
+    <string name="search">Search</string>
+    <string name="select_the_news_category">Select the news category</string>
 </resources>

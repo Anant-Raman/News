@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_headlines"
-        android:name="com.example.newsapp.ui.headlines.HeadlineFragment"
+        android:name="com.example.newsapp.ui.headlines.view.HeadlineFragment"
         android:label="@string/title_headlines"
         tools:layout="@layout/fragment_headline" />
 

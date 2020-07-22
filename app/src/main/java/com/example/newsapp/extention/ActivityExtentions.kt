@@ -67,45 +67,18 @@ fun Activity.showBiometric(
                 errString: CharSequence
             ) {
                 super.onAuthenticationError(errorCode, errString)
-                Toast.makeText(
-                    context,
-                    "Authentication error: $errString", Toast.LENGTH_SHORT
-                )
-                    .show()
                 onAuthenticationCancelled()
-//                toggleBtn.isChecked = !enableTouch
             }
 
             override fun onAuthenticationSucceeded(
                 result: BiometricPrompt.AuthenticationResult
             ) {
                 super.onAuthenticationSucceeded(result)
-                Toast.makeText(
-                    context,
-                    "Authentication succeeded!", Toast.LENGTH_SHORT
-                )
-                    .show()
-
                 onAuthenticated()
-//                when (taskToDo) {
-//                    0 -> {
-//                        SharedPreferences.storeBooleanSharedPref(
-//                            Constants.TOUCH_ID_ENABLED,
-//                            enableTouch,
-//                            context
-//                        )
-//                    }
-//                }
-
             }
 
             override fun onAuthenticationFailed() {
                 super.onAuthenticationFailed()
-                Toast.makeText(
-                    context, "Authentication failed",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
             }
         })
 

@@ -1,6 +1,10 @@
 package com.example.newsapp.ui.headlines.viewmodel
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.util.Log
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.news.data.Article
@@ -23,9 +27,9 @@ class HeadlineViewModel : ViewModel(),IViewApiListener {
         repository = ArticleRepository(articleDao)
     }
 
-    fun fetchHeadline(country : String) {
+    fun fetchHeadline(country : String,page: Int) {
         val service = RestApiService()
-        service.getHeadlines(this,country, state)
+        service.getHeadlines(this,page,country, state)
     }
 
     fun saveNews(article: Article) {

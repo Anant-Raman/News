@@ -25,4 +25,8 @@
     <string name="anantraman_india_gmail_com">anantraman.india@gmail.com</string>
     <string name="select_your_country">Select your country</string>
     <string name="delete_all">Delete All</string>
+    <string name="back_button">Back Button</string>
+    <string name="next_last">Next Last</string>
+    <string name="next_button">Next Button</string>
+    <string name="last_button">Last Button</string>
 </resources>

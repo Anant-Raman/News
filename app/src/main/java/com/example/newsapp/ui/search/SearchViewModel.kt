@@ -1,5 +1,6 @@
 package com.example.newsapp.ui.search
 
+import android.graphics.pdf.PdfDocument
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,10 +24,9 @@ class SearchViewModel : ViewModel(),IViewApiListener {
         repository = ArticleRepository(articleDao)
     }
 
-    fun fetchSearchResult(searchKey : String, sortBy : String, language : String) {
-        Log.i("Anant", searchKey)
+    fun fetchSearchResult(searchKey : String,page: Int, sortBy : String, language : String) {
         val service = RestApiService()
-        service.getSearchResult(searchKey, sortBy,language,this, state)
+        service.getSearchResult(searchKey, page, sortBy,language,this, state)
     }
 
     fun saveNews(article: Article){

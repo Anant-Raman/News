@@ -24,9 +24,9 @@ class CategoryViewModel : ViewModel(), IViewApiListener {
     }
 
 
-    fun fetchCategoryHeadline(country: String, category: String) {
+    fun fetchCategoryHeadline(country: String, page : Int, category: String) {
         val service = RestApiService()
-        service.getHeadlinesByCategory(country, category, this, state)
+        service.getHeadlinesByCategory(country,page, category, this, state)
     }
 
     fun saveNews(article: Article) {

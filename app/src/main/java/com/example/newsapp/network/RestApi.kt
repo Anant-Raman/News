@@ -11,6 +11,7 @@ interface RestApi {
     @GET("top-headlines")
     fun getHeadlines(
         @Query("country") country : String,
+        @Query("page") page: Int,
         @Query("apiKey") apiKey: String )
             : Call<NewsData>
 
@@ -18,6 +19,7 @@ interface RestApi {
     @GET("top-headlines")
     fun getHeadlinesByCategory(
         @Query("country") country : String,
+        @Query("page") page: Int,
         @Query("category") category : String,
         @Query("apiKey") apiKey: String )
             : Call<NewsData>
@@ -25,18 +27,12 @@ interface RestApi {
     @GET("everything")
     fun getHeadSearchResult(
         @Query("qInTitle") searchKey : String,
+        @Query("page") page: Int,
         @Query("sortBy") sortBy : String,
         @Query("language") language : String,
         @Query("apiKey") apiKey: String )
             : Call<NewsData>
 
-//    @GET("/w/api.php")
-//    fun getSearch(
-//        @Query("action") action: String,
-//        @Query("format") format: String?,
-//        @Query("list") list: String?,
-//        @Query("srsearch") search: String?
-//    ): Call<SearchModel>
 
      // https://reqres.in/api/users?page=2
 

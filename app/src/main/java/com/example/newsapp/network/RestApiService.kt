@@ -16,6 +16,7 @@ class RestApiService {
 
     fun getHeadlines(
         listener: IViewApiListener,
+        page : Int,
         country: String,
         state: MutableLiveData<String>
     ) {
@@ -24,7 +25,7 @@ class RestApiService {
 
         val apiService = endpoints.getNetworkService(RestApi::class.java, 0)
 
-        val call: Call<NewsData> = apiService.getHeadlines(country, "8d4a8a814d09473eb8d672ab8bcea034")
+        val call: Call<NewsData> = apiService.getHeadlines(country, page,"8d4a8a814d09473eb8d672ab8bcea034")
 
 
         call.enqueue(object : Callback<NewsData> {
@@ -34,7 +35,6 @@ class RestApiService {
             }
 
             override fun onResponse(call: Call<NewsData>?, response: Response<NewsData>?) {
-
 
                 if (response!!.isSuccessful) {
                     state.postValue(Constants.STATUS_LOADED)
@@ -48,6 +48,7 @@ class RestApiService {
     }
     fun getHeadlinesByCategory(
         country:String,
+        page :Int,
         category: String,
         listener: IViewApiListener,
         state: MutableLiveData<String>
@@ -57,7 +58,7 @@ class RestApiService {
 
         val apiService = endpoints.getNetworkService(RestApi::class.java, 0)
 
-        val call: Call<NewsData> = apiService.getHeadlinesByCategory(country, category,"8d4a8a814d09473eb8d672ab8bcea034")
+        val call: Call<NewsData> = apiService.getHeadlinesByCategory(country,page, category,"8d4a8a814d09473eb8d672ab8bcea034")
 
 
         call.enqueue(object : Callback<NewsData> {
@@ -82,6 +83,7 @@ class RestApiService {
 
     fun getSearchResult(
         searchKey : String,
+        page : Int,
         sortBy : String,
         language : String,
         listener: IViewApiListener,
@@ -92,7 +94,7 @@ class RestApiService {
 
         val apiService = endpoints.getNetworkService(RestApi::class.java, 0)
 
-        val call: Call<NewsData> = apiService.getHeadSearchResult(searchKey, sortBy, language,"8d4a8a814d09473eb8d672ab8bcea034")
+        val call: Call<NewsData> = apiService.getHeadSearchResult(searchKey,page, sortBy, language,"8d4a8a814d09473eb8d672ab8bcea034")
 
 
         call.enqueue(object : Callback<NewsData> {

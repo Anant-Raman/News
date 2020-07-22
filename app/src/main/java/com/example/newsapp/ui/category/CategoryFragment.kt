@@ -1,7 +1,10 @@
 package com.example.newsapp.ui.category
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,8 +25,10 @@ import com.example.newsapp.callbacks.NewsCallbacks
 import com.example.newsapp.core.Constants
 import com.example.newsapp.databinding.FragmentCategoryBinding
 import com.example.newsapp.ui.webview.WebViewActivity
+import com.example.newsapp.utility.SnackBarUtils
 import kotlinx.android.synthetic.main.fragment_headline.*
 import java.util.*
+import kotlin.math.ceil
 
 
 class CategoryFragment : Fragment() {
@@ -31,6 +36,11 @@ class CategoryFragment : Fragment() {
     private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var fragmentCategoryBinding: FragmentCategoryBinding
     private var categoryList = arrayListOf<String>()
+    private lateinit var categoty : String
+    private var page = 1
+    private val pageSize = 20
+    private var totalData: Int? = null
+    private val countryCat = "in"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,10 +51,14 @@ class CategoryFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_category, container, false)
         categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
         initViews()
-        observeLiveData()
         categoryList = categoryViewModel.initCategoryList()
         initSpinner()
         return fragmentCategoryBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        observeLiveData()
     }
 
     private fun initViews() {
@@ -55,6 +69,10 @@ class CategoryFragment : Fragment() {
     private fun observeLiveData() {
         categoryViewModel.categoryHeadline.observe(viewLifecycleOwner, Observer {
             val mArticleList: List<Article> = it.articles
+            totalData = it.totalResult
+            if(totalData!=null && totalData!!>100){
+                totalData = 100
+            }
             val newsArticleAdapter = NewsArticleAdapter(mArticleList, object :
                 NewsCallbacks {
 
@@ -64,6 +82,7 @@ class CategoryFragment : Fragment() {
 
                 override fun saveArticle(position: Int) {
                     saveNews(mArticleList.get(position))
+                    SnackBarUtils.showSnackBar("News saved",fragmentCategoryBinding.rootCategory,requireContext())
                 }
 
                 override fun deleteArticle(position: Int) {
@@ -71,6 +90,7 @@ class CategoryFragment : Fragment() {
                 }
             })
             rv_news.adapter = newsArticleAdapter
+            setPaging()
         })
 
         categoryViewModel.state.observe(viewLifecycleOwner, Observer { state ->
@@ -117,7 +137,15 @@ class CategoryFragment : Fragment() {
                     (view as TextView).setTextColor(Color.WHITE)
                     (view).setTextSize(18f)
                     if (position > 0) {
-                        categoryViewModel.fetchCategoryHeadline("in", categoryList.get(position))
+                        page = 1
+                        categoty = categoryList[position]
+                        if (InternetCheck() == true) {
+                            categoryViewModel.fetchCategoryHeadline(
+                                countryCat,
+                                page,
+                                categoryList.get(position)
+                            )
+                        }
                     }
                 }
             }
@@ -128,9 +156,78 @@ class CategoryFragment : Fragment() {
     }
 
     private fun launchWebView(article: Article){
-        val intent = Intent(requireContext(), WebViewActivity::class.java)
-        intent.putExtra("url", article.url)
-        this.startActivity(intent)
+        if (InternetCheck() == true) {
+            val intent = Intent(requireContext(), WebViewActivity::class.java)
+            intent.putExtra("url", article.url)
+            this.startActivity(intent)
+        }
     }
 
+    private fun setPaging() {
+        fragmentCategoryBinding.btnNext.setOnClickListener {
+            if (InternetCheck() == true) {
+                if (totalData != null && page * 20 < totalData!!) {
+                    categoryViewModel.fetchCategoryHeadline(countryCat, ++page, categoty)
+                }
+            }
+        }
+
+        fragmentCategoryBinding.btnPrev.setOnClickListener {
+            if (page > 1) {
+                if (InternetCheck() == true) {
+                    categoryViewModel.fetchCategoryHeadline(countryCat, --page, categoty)
+                }
+            }
+        }
+
+        fragmentCategoryBinding.btnFirst.setOnClickListener {
+            if (page > 1) {
+                if (InternetCheck() == true) {
+                    page = 1
+                    categoryViewModel.fetchCategoryHeadline(countryCat, page, categoty)
+                }
+            }
+        }
+        fragmentCategoryBinding.btnLast.setOnClickListener {
+            if (totalData != null) {
+                val pageLast = ceil((totalData!!.toDouble() / pageSize)).toInt()
+                if (page < pageLast) {
+                    if (InternetCheck() == true) {
+                        page = pageLast
+                        categoryViewModel.fetchCategoryHeadline(countryCat, page, categoty)
+                    }
+                }
+            }
+        }
+
+        if (page == 1) {
+            fragmentCategoryBinding.btnFirst.alpha = .5f
+            fragmentCategoryBinding.btnPrev.alpha = .5f
+        } else {
+            fragmentCategoryBinding.btnFirst.alpha = 1f
+            fragmentCategoryBinding.btnPrev.alpha = 1f
+        }
+        if (totalData != null) {
+            val pageLast = ceil((totalData!!.toDouble() / pageSize)).toInt()
+            fragmentCategoryBinding.pageNumber = page.toString().plus(" of ").plus(pageLast)
+            if (page == pageLast) {
+                fragmentCategoryBinding.btnLast.alpha = .5f
+                fragmentCategoryBinding.btnNext.alpha = .5f
+            } else {
+                fragmentCategoryBinding.btnLast.alpha = 1f
+                fragmentCategoryBinding.btnNext.alpha = 1f
+            }
+        }
+    }
+
+    private fun InternetCheck(): Boolean? {
+        val cm =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
+        val isConnected = activeNetwork?.isConnectedOrConnecting == true
+        if(!isConnected){
+            SnackBarUtils.showSnackBar("Internet Connection not available",fragmentCategoryBinding.rootCategory,requireContext())
+        }
+        return isConnected
+    }
 }

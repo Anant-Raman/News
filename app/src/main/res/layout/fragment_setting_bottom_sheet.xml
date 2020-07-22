@@ -66,8 +66,7 @@
                     app:layout_constraintBottom_toTopOf="@id/tv_email"
                     app:layout_constraintEnd_toStartOf="@id/civ_github"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginRight="@dimen/dp_16" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <TextView
                     android:id="@+id/tv_email"
@@ -80,8 +79,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_developer_name"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/civ_github"
-                    android:layout_marginRight="@dimen/dp_16" />
+                    app:layout_constraintEnd_toStartOf="@id/civ_github"/>
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/civ_github"
@@ -91,8 +89,7 @@
                     android:src="@drawable/ic_github_black"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/civ_linkedIn"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginRight="@dimen/dp_16" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/civ_linkedIn"

@@ -23,6 +23,7 @@ import com.example.newsapp.databinding.FragmentSavedNewsBinding
 import com.example.newsapp.extention.showBiometric
 import com.example.newsapp.extention.showDialog
 import com.example.newsapp.ui.webview.WebViewActivity
+import com.example.newsapp.utility.SnackBarUtils
 import kotlinx.android.synthetic.main.fragment_headline.*
 
 class SavedNewsFragment : Fragment() {
@@ -126,10 +127,12 @@ class SavedNewsFragment : Fragment() {
 
     private fun deleteNews(article: Article){
         savedViewModel.deleteNews(article)
+        SnackBarUtils.showSnackBar("Deleted",fragmentSavedNewsBinding.savedRoot,requireContext())
     }
 
     private fun deleteAll(){
         savedViewModel.deleteAll()
+        SnackBarUtils.showSnackBar("All articles deleted",fragmentSavedNewsBinding.savedRoot,requireContext())
     }
 
     private fun launchWebView(article: Article){

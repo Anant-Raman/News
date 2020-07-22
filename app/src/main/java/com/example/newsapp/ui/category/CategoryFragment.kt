@@ -42,7 +42,7 @@ class CategoryFragment : Fragment() {
         categoryViewModel = ViewModelProvider(this).get(CategoryViewModel::class.java)
         initViews()
         observeLiveData()
-        initCategoryList()
+        categoryList = categoryViewModel.initCategoryList()
         initSpinner()
         return fragmentCategoryBinding.root
     }
@@ -64,6 +64,10 @@ class CategoryFragment : Fragment() {
 
                 override fun saveArticle(position: Int) {
                     saveNews(mArticleList.get(position))
+                }
+
+                override fun deleteArticle(position: Int) {
+//                    TODO("Not yet implemented")
                 }
             })
             rv_news.adapter = newsArticleAdapter
@@ -117,16 +121,6 @@ class CategoryFragment : Fragment() {
                     }
                 }
             }
-    }
-
-    private fun initCategoryList() {
-        categoryList.add("Business")
-        categoryList.add("Entertainment")
-        categoryList.add("General")
-        categoryList.add("Health")
-        categoryList.add("Science")
-        categoryList.add("Sports")
-        categoryList.add("Technology")
     }
 
     private fun saveNews(article: Article){

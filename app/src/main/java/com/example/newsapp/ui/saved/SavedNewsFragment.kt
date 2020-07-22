@@ -1,11 +1,14 @@
 package com.example.newsapp.ui.saved
 
 import android.content.Intent
+import android.os.Build
+import androidx.biometric.BiometricManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +20,8 @@ import com.example.newsapp.R
 import com.example.newsapp.adapter.SavedNewsArticleAdapter
 import com.example.newsapp.callbacks.NewsCallbacks
 import com.example.newsapp.databinding.FragmentSavedNewsBinding
+import com.example.newsapp.extention.showBiometric
+import com.example.newsapp.extention.showDialog
 import com.example.newsapp.ui.webview.WebViewActivity
 import kotlinx.android.synthetic.main.fragment_headline.*
 
@@ -28,6 +33,7 @@ class SavedNewsFragment : Fragment() {
 
     private lateinit var fragmentSavedNewsBinding : FragmentSavedNewsBinding
     private lateinit var savedViewModel: SavedNewsViewModel
+    private lateinit var articleToDelete: Article
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +45,7 @@ class SavedNewsFragment : Fragment() {
         setUpActionBar()
         initViews()
         observeData()
+        setOnClick()
         return fragmentSavedNewsBinding.root
     }
 
@@ -46,6 +53,14 @@ class SavedNewsFragment : Fragment() {
         fragmentSavedNewsBinding.rvNews.layoutManager =
             LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
     }
+
+    private fun setOnClick(){
+        fragmentSavedNewsBinding.deleteAllBtn.setOnClickListener {
+            confirmDeleteAll()
+        }
+
+    }
+
     private fun observeData() {
         savedViewModel.articleList.observe(viewLifecycleOwner, Observer {
             val mArticleList: List<Article> = it
@@ -53,11 +68,15 @@ class SavedNewsFragment : Fragment() {
                 NewsCallbacks {
 
                 override fun launchNewsWebView(position: Int) {
-                    launchWebView(mArticleList.get(position))
+                    launchWebView(mArticleList[position])
                 }
 
                 override fun saveArticle(position: Int) {
-                    saveNews(mArticleList.get(position))
+
+                }
+
+                override fun deleteArticle(position: Int) {
+                    confirmDelete(mArticleList[position])
                 }
             }
             )
@@ -66,8 +85,51 @@ class SavedNewsFragment : Fragment() {
 
     }
 
-    private fun saveNews(article: Article){
-       // savedViewModel.saveNews(article)
+    private fun confirmDelete(article: Article){
+        activity?.let {
+            articleToDelete = article
+            it.showDialog("Delete article?","Are you sure you want to delete this article?","Yes","No",onCancelled,onContinue)
+        }
+    }
+
+    private fun confirmDeleteAll(){
+        activity?.let {
+            it.showDialog("Delete all articles?","Are you sure you want to delete all the articles? (Enable your fingerprint scanner for further security)","Yes","No",
+                onCancelled,onContinueDeleteAll as () -> Unit)
+        }
+    }
+
+    private var onContinue= {
+        deleteNews(articleToDelete)
+    }
+
+    private var onContinueDeleteAll ={
+        val biometricManager = BiometricManager.from(requireContext())
+        if (savedViewModel.canAuthenticate(biometricManager)) {
+            activity?.let {
+                it.showBiometric(it,requireContext(),onAuthenticated,onCancelled)
+            }
+        }
+        else{
+            deleteAll()
+        }
+    }
+
+
+    private var onCancelled = {
+
+    }
+
+    private var onAuthenticated = {
+        deleteAll()
+    }
+
+    private fun deleteNews(article: Article){
+        savedViewModel.deleteNews(article)
+    }
+
+    private fun deleteAll(){
+        savedViewModel.deleteAll()
     }
 
     private fun launchWebView(article: Article){

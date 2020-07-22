@@ -23,9 +23,9 @@ class HeadlineViewModel : ViewModel(),IViewApiListener {
         repository = ArticleRepository(articleDao)
     }
 
-    fun fetchHeadline() {
+    fun fetchHeadline(country : String) {
         val service = RestApiService()
-        service.getHeadlines(this, state)
+        service.getHeadlines(this,country, state)
     }
 
     fun saveNews(article: Article) {

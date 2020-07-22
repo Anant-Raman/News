@@ -5,4 +5,6 @@ interface NewsCallbacks {
     fun launchNewsWebView(position: Int)
 
     fun saveArticle(position: Int)
+
+    fun deleteArticle(position : Int)
 }

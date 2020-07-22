@@ -13,7 +13,13 @@ class ArticleRepository(private val articleDao: ArticleDao) {
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
     fun insert(article : Article) {
-        Log.i("Anant", article.title)
         articleDao.insert(article)
+    }
+
+    fun delete(article: Article){
+        articleDao.delete(article)
+    }
+    fun deleteAll(){
+        articleDao.deleteAll()
     }
 }

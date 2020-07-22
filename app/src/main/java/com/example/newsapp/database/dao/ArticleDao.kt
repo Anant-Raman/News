@@ -2,6 +2,7 @@ package com.example.newsapp.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import com.example.news.data.Article
@@ -15,6 +16,10 @@ interface ArticleDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(article: Article?)
 
+    @Delete
+    fun delete(article: Article?)
+
     @androidx.room.Query("DELETE FROM saved_article_table")
-    suspend fun deleteAll()
+    fun deleteAll()
+
 }

@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -30,7 +32,11 @@ class SearchFragment : Fragment() {
     private lateinit var searchBinding: FragmentSearchBinding
     private lateinit var sortBy : String
     private lateinit var language : String
+
     private var sortByList = arrayListOf<String>()
+    private var sortByListLabel = arrayListOf<String>()
+    private var languageList = arrayListOf<String>()
+    private var languageLabelList = arrayListOf<String>()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -42,6 +48,7 @@ class SearchFragment : Fragment() {
         sortBy = "publishedAt"
         language = "en"
         initViews()
+        initSpinner()
         initSearchView()
         observeResult()
         return searchBinding.root
@@ -51,33 +58,62 @@ class SearchFragment : Fragment() {
         searchBinding.rvNews.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
     }
 
-//    private fun initSpinner() {
-//        val adapter = ArrayAdapter(
-//            requireActivity().applicationContext,
-//            android.R.layout.simple_spinner_dropdown_item,
-//            sortByList
-//        )
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//        searchBinding.spinnerCategory.adapter = adapter
-//
-//        fragmentCategoryBinding.spinnerCategory.onItemSelectedListener =
-//            object : AdapterView.OnItemSelectedListener {
-//                override fun onNothingSelected(parent: AdapterView<*>?) {
-//
-//                }
-//
-//                override fun onItemSelected(
-//                    parent: AdapterView<*>?,
-//                    view: View?,
-//                    position: Int,
-//                    id: Long
-//                ) {
-//                    if (position > 0) {
-//                        categoryViewModel.fetchCategoryHeadline("in", categoryList.get(position))
-//                    }
-//                }
-//            }
-//    }
+    private fun initSpinner() {
+        sortByList = searchViewModel.initSortList()
+        sortByListLabel = searchViewModel.initSortListLabel()
+        val adapter = ArrayAdapter(
+            requireActivity().applicationContext,
+            android.R.layout.simple_spinner_dropdown_item,
+            sortByListLabel
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        searchBinding.spinnerSort.adapter = adapter
+
+        searchBinding.spinnerSort.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    sortBy = sortByList.get(position)
+                }
+            }
+
+
+
+        languageList = searchViewModel.initLanguageList()
+        languageLabelList = searchViewModel.initLanguageLabelList()
+
+        val langAdapter = ArrayAdapter(
+            requireActivity().applicationContext,
+            android.R.layout.simple_spinner_dropdown_item,
+            languageLabelList
+        )
+        langAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        searchBinding.setLanguageSpinner.adapter = langAdapter
+
+        searchBinding.setLanguageSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+
+                }
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    language = languageList.get(position)
+                }
+            }
+    }
 
     fun initSearchView(){
         searchBinding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -116,6 +152,10 @@ class SearchFragment : Fragment() {
                 override fun saveArticle(position: Int) {
                     saveNews(mArticleList.get(position))
                 }
+
+                override fun deleteArticle(position: Int) {
+//                    TODO("Not yet implemented")
+                }
             })
             rv_news.adapter = newsArticleAdapter
         })
@@ -146,4 +186,5 @@ class SearchFragment : Fragment() {
         intent.putExtra("url", article.url)
         this.startActivity(intent)
     }
+
 }

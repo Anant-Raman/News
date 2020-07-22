@@ -2,11 +2,12 @@ package com.example.newsapp.ui.headlines.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
+import android.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,14 +18,18 @@ import com.example.newsapp.R
 import com.example.newsapp.callbacks.NewsCallbacks
 import com.example.newsapp.core.Constants
 import com.example.newsapp.databinding.FragmentHeadlineBinding
+import com.example.newsapp.extention.showBottomSheet
 import com.example.newsapp.ui.headlines.viewmodel.HeadlineViewModel
 import com.example.newsapp.ui.webview.WebViewActivity
+import com.example.newsapp.utility.SharedPreferences
 import kotlinx.android.synthetic.main.fragment_headline.*
 
 class HeadlineFragment : Fragment() {
 
     private lateinit var headlineViewModel: HeadlineViewModel
     private lateinit var fragmentHeadlineBinding: FragmentHeadlineBinding
+    private var country = "in"
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,13 +44,47 @@ class HeadlineFragment : Fragment() {
         return fragmentHeadlineBinding.root
     }
 
+
     private fun setUpActionBar() {
         fragmentHeadlineBinding.headlineToolbar.title = "Headlines"
+        fragmentHeadlineBinding.menuBtn.setOnClickListener {
+            openSettingBottomSheet()
+        }
+    }
+
+    private fun openSettingBottomSheet() {
+        activity?.let {
+            it.showBottomSheet(parentFragmentManager)
+        }
+
+    }
+    override fun onCreateOptionsMenu(menu: Menu,inflater: MenuInflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.main, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     private fun initViews() {
         fragmentHeadlineBinding.rvNews.layoutManager =
             LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+
+        if(SharedPreferences.getStringSharedPref(Constants.COUNTRY,requireContext())!=null){
+            country = SharedPreferences.getStringSharedPref(Constants.COUNTRY,requireContext()).toString()
+        }
+
+        fragmentHeadlineBinding.swipeRefreshLayout.setOnRefreshListener {
+            refreshAction()                    // refresh your list contents somehow
+            fragmentHeadlineBinding.swipeRefreshLayout.isRefreshing = false   // reset the SwipeRefreshLayout (stop the loading spinner)
+        }
+
+    }
+
+    private fun refreshAction(){
+        if(SharedPreferences.getStringSharedPref(Constants.COUNTRY,requireContext())!=null){
+            country = SharedPreferences.getStringSharedPref(Constants.COUNTRY,requireContext()).toString()
+        }
+        Log.i("Anant","Refreshed")
+        headlineViewModel.fetchHeadline(country)
     }
 
     private fun observeLiveData() {
@@ -61,11 +100,15 @@ class HeadlineFragment : Fragment() {
                 override fun saveArticle(position: Int) {
                     saveNews(mArticleList.get(position))
                 }
+
+                override fun deleteArticle(position: Int) {
+//                    TODO("Not yet implemented")
+                }
             }
             )
             rv_news.adapter = newsArticleAdapter
         })
-        headlineViewModel.fetchHeadline()
+        headlineViewModel.fetchHeadline(country)
 
         headlineViewModel.state.observe(viewLifecycleOwner, Observer { state ->
             when (state) {

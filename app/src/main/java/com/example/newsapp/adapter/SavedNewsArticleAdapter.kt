@@ -42,7 +42,7 @@ class SavedNewsArticleAdapter(private val mArticleList: List<Article>,
             .error(R.drawable.ic_broken_image_grey_24dp)
         if (mArticleList.get(position).urlToImage != null)
             Glide.with(mContext).load(mArticleList.get(position).urlToImage).centerCrop()
-                .apply(options).into(holder.imgage)
+                .apply(options).into(holder.image)
         holder.title.text = mArticleList.get(position).title
         if (mArticleList.get(position).description != null)
             holder.description.text = mArticleList.get(position).description.toString()
@@ -55,12 +55,12 @@ class SavedNewsArticleAdapter(private val mArticleList: List<Article>,
                 newsCallbacks.launchNewsWebView(position)
             }
         holder.btnDelete.setOnClickListener {
-            newsCallbacks.saveArticle(position)
+            newsCallbacks.deleteArticle(position)
         }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imgage: ImageView = itemView.findViewById(R.id.iv_article_image)
+        val image: ImageView = itemView.findViewById(R.id.iv_article_image)
         val title: TextView = itemView.findViewById(R.id.tv_article_title)
         val description: TextView = itemView.findViewById(R.id.tv_article_description)
         val published: TextView = itemView.findViewById(R.id.tv_published)

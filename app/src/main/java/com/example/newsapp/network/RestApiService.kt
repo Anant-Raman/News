@@ -16,6 +16,7 @@ class RestApiService {
 
     fun getHeadlines(
         listener: IViewApiListener,
+        country: String,
         state: MutableLiveData<String>
     ) {
 
@@ -23,7 +24,7 @@ class RestApiService {
 
         val apiService = endpoints.getNetworkService(RestApi::class.java, 0)
 
-        val call: Call<NewsData> = apiService.getHeadlines("in", "8d4a8a814d09473eb8d672ab8bcea034")
+        val call: Call<NewsData> = apiService.getHeadlines(country, "8d4a8a814d09473eb8d672ab8bcea034")
 
 
         call.enqueue(object : Callback<NewsData> {

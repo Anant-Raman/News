@@ -1,6 +1,5 @@
 package com.globallogic.sampleapp.framework.network
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.news.data.NewsData
 import com.example.newsapp.core.Constants
@@ -8,7 +7,6 @@ import com.example.newsapp.network.RestApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 
 class RestApiService {
 
@@ -16,7 +14,7 @@ class RestApiService {
 
     fun getHeadlines(
         listener: IViewApiListener,
-        page : Int,
+        page: Int,
         country: String,
         state: MutableLiveData<String>
     ) {
@@ -25,7 +23,7 @@ class RestApiService {
 
         val apiService = endpoints.getNetworkService(RestApi::class.java, 0)
 
-        val call: Call<NewsData> = apiService.getHeadlines(country, page,"8d4a8a814d09473eb8d672ab8bcea034")
+        val call: Call<NewsData> = apiService.getHeadlines(country, page, Constants.API_KEY)
 
 
         call.enqueue(object : Callback<NewsData> {
@@ -46,9 +44,10 @@ class RestApiService {
             }
         })
     }
+
     fun getHeadlinesByCategory(
-        country:String,
-        page :Int,
+        country: String,
+        page: Int,
         category: String,
         listener: IViewApiListener,
         state: MutableLiveData<String>
@@ -58,7 +57,8 @@ class RestApiService {
 
         val apiService = endpoints.getNetworkService(RestApi::class.java, 0)
 
-        val call: Call<NewsData> = apiService.getHeadlinesByCategory(country,page, category,"8d4a8a814d09473eb8d672ab8bcea034")
+        val call: Call<NewsData> =
+            apiService.getHeadlinesByCategory(country, page, category, Constants.API_KEY)
 
 
         call.enqueue(object : Callback<NewsData> {
@@ -82,10 +82,10 @@ class RestApiService {
     }
 
     fun getSearchResult(
-        searchKey : String,
-        page : Int,
-        sortBy : String,
-        language : String,
+        searchKey: String,
+        page: Int,
+        sortBy: String,
+        language: String,
         listener: IViewApiListener,
         state: MutableLiveData<String>
     ) {
@@ -94,7 +94,8 @@ class RestApiService {
 
         val apiService = endpoints.getNetworkService(RestApi::class.java, 0)
 
-        val call: Call<NewsData> = apiService.getHeadSearchResult(searchKey,page, sortBy, language,"8d4a8a814d09473eb8d672ab8bcea034")
+        val call: Call<NewsData> =
+            apiService.getHeadSearchResult(searchKey, page, sortBy, language, Constants.API_KEY)
 
 
         call.enqueue(object : Callback<NewsData> {

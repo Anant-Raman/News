@@ -32,10 +32,4 @@ interface RestApi {
         @Query("language") language : String,
         @Query("apiKey") apiKey: String )
             : Call<NewsData>
-
-
-     // https://reqres.in/api/users?page=2
-
-    //https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&srsearch=bhavesh,
-
 }

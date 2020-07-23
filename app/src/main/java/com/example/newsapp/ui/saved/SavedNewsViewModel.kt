@@ -6,6 +6,7 @@ import androidx.biometric.BiometricManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.news.data.Article
+import com.example.newsapp.core.Constants
 import com.example.newsapp.core.MainApplication
 import com.example.newsapp.database.ArticleRepository
 import com.example.newsapp.database.ArticleRoomDatabase
@@ -40,17 +41,16 @@ class SavedNewsViewModel : ViewModel() {
     fun canAuthenticate(biometricManager: BiometricManager): Boolean {
         when (biometricManager.canAuthenticate()) {
             BiometricManager.BIOMETRIC_SUCCESS -> {
-                Log.d("MY_APP_TAG", "App can authenticate using biometrics.")
+                Log.d(Constants.TAG, Constants.CAN_AUTHENTICATE)
                 return true
             }
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE ->
-                Log.e("MY_APP_TAG", "No biometric features available on this device.")
+                Log.e(Constants.TAG, Constants.NO_BIOMETRICS_ON_DEVICE)
             BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE ->
-                Log.e("MY_APP_TAG", "Biometric features are currently unavailable.")
+                Log.e(Constants.TAG, Constants.BIOMETRICS_UNAVAILABLE)
             BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED ->
                 Log.e(
-                    "MY_APP_TAG", "The user hasn't associated " +
-                            "any biometric credentials with their account."
+                    Constants.TAG, Constants.NOT_ASSOCIATED_BIOMETRICS
                 )
         }
         return false

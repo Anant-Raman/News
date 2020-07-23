@@ -2,14 +2,12 @@ package com.example.newsapp.ui.bottomsheet
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import com.example.news.data.Article
 import com.example.newsapp.R
 import com.example.newsapp.core.Constants
 import com.example.newsapp.ui.webview.WebViewActivity
@@ -21,35 +19,22 @@ class SettingBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var countryList: ArrayList<String>
     private lateinit var countryLabelList: ArrayList<String>
-    private lateinit var countrySpinner : Spinner
-    private lateinit var civGithub : CircleImageView
-    private lateinit var civLinkedin : CircleImageView
+    private lateinit var countrySpinner: Spinner
+    private lateinit var civGithub: CircleImageView
+    private lateinit var civLinkedin: CircleImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val root= inflater.inflate(R.layout.fragment_setting_bottom_sheet, container, false)
+        val root = inflater.inflate(R.layout.fragment_setting_bottom_sheet, container, false)
         initSpinner(root)
         initWebView(root)
         return root
     }
 
-    fun initWebView(view: View) {
-        civGithub = view.findViewById(R.id.civ_github)
-        civLinkedin = view.findViewById(R.id.civ_linkedIn)
-
-        civGithub.setOnClickListener {
-            launchWebView(Constants.URL_GITHUB)
-        }
-
-        civLinkedin.setOnClickListener {
-            launchWebView(Constants.URL_LINKEDIN)
-        }
-
-    }
-    fun initSpinner(view : View){
+    fun initSpinner(view: View) {
         countrySpinner = view.findViewById(R.id.setCountrySpinner)
         countryList = initCountryList()
         countryLabelList = initCountryLabelList()
@@ -65,7 +50,7 @@ class SettingBottomSheet : BottomSheetDialogFragment() {
         countrySpinner.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
-
+                    
                 }
 
                 override fun onItemSelected(
@@ -74,20 +59,41 @@ class SettingBottomSheet : BottomSheetDialogFragment() {
                     position: Int,
                     id: Long
                 ) {
-                    SharedPreferences.StoreStringSharedPref(Constants.COUNTRY,countryList.get(position),requireContext())
+                    if(position>0) {
+                        SharedPreferences.StoreStringSharedPref(
+                            Constants.COUNTRY,
+                            countryList.get(position),
+                            requireContext()
+                        )
+                    }
                 }
             }
     }
 
-    private fun launchWebView(urlWeb : String){
+    fun initWebView(view: View) {
+        civGithub = view.findViewById(R.id.civ_github)
+        civLinkedin = view.findViewById(R.id.civ_linkedIn)
+
+        civGithub.setOnClickListener {
+            launchWebView(Constants.URL_GITHUB)
+        }
+
+        civLinkedin.setOnClickListener {
+            launchWebView(Constants.URL_LINKEDIN)
+        }
+
+    }
+
+    private fun launchWebView(urlWeb: String) {
         val intent = Intent(requireContext(), WebViewActivity::class.java)
-        intent.putExtra("url",urlWeb)
+        intent.putExtra(Constants.URL_LABEL, urlWeb)
         this.startActivity(intent)
     }
 
-    private fun initCountryList() : ArrayList<String>{
+    private fun initCountryList(): ArrayList<String> {
 
         val conList = arrayListOf<String>()
+        conList.add("")
         conList.add("in")
         conList.add("ar")
         conList.add("at")
@@ -146,9 +152,10 @@ class SettingBottomSheet : BottomSheetDialogFragment() {
         return conList
     }
 
-    private fun initCountryLabelList() : ArrayList<String>{
+    private fun initCountryLabelList(): ArrayList<String> {
 
         val countryLabelList = arrayListOf<String>()
+        countryLabelList.add(("Select your country"))
         countryLabelList.add("India")
         countryLabelList.add("Argentina")
         countryLabelList.add("Austria")

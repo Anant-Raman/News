@@ -36,11 +36,11 @@ class CategoryFragment : Fragment() {
     private lateinit var categoryViewModel: CategoryViewModel
     private lateinit var fragmentCategoryBinding: FragmentCategoryBinding
     private var categoryList = arrayListOf<String>()
-    private lateinit var categoty : String
+    private lateinit var categoty: String
     private var page = 1
     private val pageSize = 20
     private var totalData: Int? = null
-    private val countryCat = "in"
+    private val countryCat = Constants.INDIA
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,7 +70,7 @@ class CategoryFragment : Fragment() {
         categoryViewModel.categoryHeadline.observe(viewLifecycleOwner, Observer {
             val mArticleList: List<Article> = it.articles
             totalData = it.totalResult
-            if(totalData!=null && totalData!!>100){
+            if (totalData != null && totalData!! > 100) {
                 totalData = 100
             }
             val newsArticleAdapter = NewsArticleAdapter(mArticleList, object :
@@ -82,7 +82,11 @@ class CategoryFragment : Fragment() {
 
                 override fun saveArticle(position: Int) {
                     saveNews(mArticleList.get(position))
-                    SnackBarUtils.showSnackBar("News saved",fragmentCategoryBinding.rootCategory,requireContext())
+                    SnackBarUtils.showSnackBar(
+                        Constants.NEWS_SAVED,
+                        fragmentCategoryBinding.rootCategory,
+                        requireContext()
+                    )
                 }
 
                 override fun deleteArticle(position: Int) {
@@ -113,7 +117,7 @@ class CategoryFragment : Fragment() {
 
     private fun initSpinner() {
         Collections.sort(categoryList)
-        categoryList.add(0, "Select news category ")
+        categoryList.add(0, Constants.SELECT_NEWS_CATEGORY)
         val adapter = ArrayAdapter(
             requireActivity().applicationContext,
             android.R.layout.simple_spinner_dropdown_item,
@@ -139,7 +143,7 @@ class CategoryFragment : Fragment() {
                     if (position > 0) {
                         page = 1
                         categoty = categoryList[position]
-                        if (InternetCheck() == true) {
+                        if (internetCheck() == true) {
                             categoryViewModel.fetchCategoryHeadline(
                                 countryCat,
                                 page,
@@ -151,21 +155,21 @@ class CategoryFragment : Fragment() {
             }
     }
 
-    private fun saveNews(article: Article){
+    private fun saveNews(article: Article) {
         categoryViewModel.saveNews(article)
     }
 
-    private fun launchWebView(article: Article){
-        if (InternetCheck() == true) {
+    private fun launchWebView(article: Article) {
+        if (internetCheck() == true) {
             val intent = Intent(requireContext(), WebViewActivity::class.java)
-            intent.putExtra("url", article.url)
+            intent.putExtra(Constants.URL_LABEL, article.url)
             this.startActivity(intent)
         }
     }
 
     private fun setPaging() {
         fragmentCategoryBinding.btnNext.setOnClickListener {
-            if (InternetCheck() == true) {
+            if (internetCheck() == true) {
                 if (totalData != null && page * 20 < totalData!!) {
                     categoryViewModel.fetchCategoryHeadline(countryCat, ++page, categoty)
                 }
@@ -174,7 +178,7 @@ class CategoryFragment : Fragment() {
 
         fragmentCategoryBinding.btnPrev.setOnClickListener {
             if (page > 1) {
-                if (InternetCheck() == true) {
+                if (internetCheck() == true) {
                     categoryViewModel.fetchCategoryHeadline(countryCat, --page, categoty)
                 }
             }
@@ -182,7 +186,7 @@ class CategoryFragment : Fragment() {
 
         fragmentCategoryBinding.btnFirst.setOnClickListener {
             if (page > 1) {
-                if (InternetCheck() == true) {
+                if (internetCheck() == true) {
                     page = 1
                     categoryViewModel.fetchCategoryHeadline(countryCat, page, categoty)
                 }
@@ -192,7 +196,7 @@ class CategoryFragment : Fragment() {
             if (totalData != null) {
                 val pageLast = ceil((totalData!!.toDouble() / pageSize)).toInt()
                 if (page < pageLast) {
-                    if (InternetCheck() == true) {
+                    if (internetCheck() == true) {
                         page = pageLast
                         categoryViewModel.fetchCategoryHeadline(countryCat, page, categoty)
                     }
@@ -209,7 +213,7 @@ class CategoryFragment : Fragment() {
         }
         if (totalData != null) {
             val pageLast = ceil((totalData!!.toDouble() / pageSize)).toInt()
-            fragmentCategoryBinding.pageNumber = page.toString().plus(" of ").plus(pageLast)
+            fragmentCategoryBinding.pageNumber = page.toString().plus(Constants.OF).plus(pageLast)
             if (page == pageLast) {
                 fragmentCategoryBinding.btnLast.alpha = .5f
                 fragmentCategoryBinding.btnNext.alpha = .5f
@@ -220,13 +224,17 @@ class CategoryFragment : Fragment() {
         }
     }
 
-    private fun InternetCheck(): Boolean? {
+    private fun internetCheck(): Boolean? {
         val cm =
             requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
         val isConnected = activeNetwork?.isConnectedOrConnecting == true
-        if(!isConnected){
-            SnackBarUtils.showSnackBar("Internet Connection not available",fragmentCategoryBinding.rootCategory,requireContext())
+        if (!isConnected) {
+            SnackBarUtils.showSnackBar(
+                Constants.INTERNET_UNAVAILABLE,
+                fragmentCategoryBinding.rootCategory,
+                requireContext()
+            )
         }
         return isConnected
     }

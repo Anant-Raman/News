@@ -30,7 +30,7 @@ class HeadlineFragment : Fragment() {
 
     private lateinit var headlineViewModel: HeadlineViewModel
     private lateinit var fragmentHeadlineBinding: FragmentHeadlineBinding
-    private var country = "in"
+    private var country = Constants.INDIA
     private var page = 1
     private val pageSize = 20
     private var totalData: Int? = null
@@ -55,7 +55,7 @@ class HeadlineFragment : Fragment() {
     }
 
     private fun setUpActionBar() {
-        fragmentHeadlineBinding.headlineToolbar.title = "Headlines"
+        fragmentHeadlineBinding.headlineToolbar.title = Constants.HEADLINE
         fragmentHeadlineBinding.menuBtn.setOnClickListener {
             openSettingBottomSheet()
         }
@@ -84,7 +84,7 @@ class HeadlineFragment : Fragment() {
         }
 
         fragmentHeadlineBinding.swipeRefreshLayout.setOnRefreshListener {
-            if (InternetCheck() == true) {
+            if (internetCheck() == true) {
                 page = 1
                 refreshAction()                    // refresh your list contents somehow
                 fragmentHeadlineBinding.swipeRefreshLayout.isRefreshing =
@@ -97,7 +97,7 @@ class HeadlineFragment : Fragment() {
 
         fragmentHeadlineBinding.btnNext.setOnClickListener {
             if (totalData != null && page * 20 < totalData!!) {
-                if (InternetCheck() == true) {
+                if (internetCheck() == true) {
                     headlineViewModel.fetchHeadline(country, ++page)
                 }
             }
@@ -105,7 +105,7 @@ class HeadlineFragment : Fragment() {
 
         fragmentHeadlineBinding.btnPrev.setOnClickListener {
             if (page > 1) {
-                if (InternetCheck() == true) {
+                if (internetCheck() == true) {
                     headlineViewModel.fetchHeadline(country, --page)
                 }
             }
@@ -113,7 +113,7 @@ class HeadlineFragment : Fragment() {
 
         fragmentHeadlineBinding.btnFirst.setOnClickListener {
             if (page > 1) {
-                if (InternetCheck() == true) {
+                if (internetCheck() == true) {
                     page = 1
                     headlineViewModel.fetchHeadline(country, page)
                 }
@@ -123,7 +123,7 @@ class HeadlineFragment : Fragment() {
             if (totalData != null) {
                 val pageLast = ceil((totalData!!.toDouble() / pageSize)).toInt()
                 if (page < pageLast) {
-                    if (InternetCheck() == true) {
+                    if (internetCheck() == true) {
                         page = pageLast
                         headlineViewModel.fetchHeadline(country, page)
                     }
@@ -186,7 +186,7 @@ class HeadlineFragment : Fragment() {
             rv_news.adapter = newsArticleAdapter
             setPaging()
         })
-        if (InternetCheck() == true) {
+        if (internetCheck() == true) {
             headlineViewModel.fetchHeadline(country, 1)
         }
         headlineViewModel.state.observe(viewLifecycleOwner, Observer { state ->
@@ -209,24 +209,32 @@ class HeadlineFragment : Fragment() {
 
     private fun saveNews(article: Article) {
         headlineViewModel.saveNews(article)
-        SnackBarUtils.showSnackBar("News saved",fragmentHeadlineBinding.swipeRefreshLayout,requireContext())
+        SnackBarUtils.showSnackBar(
+            Constants.NEWS_SAVED,
+            fragmentHeadlineBinding.swipeRefreshLayout,
+            requireContext()
+        )
     }
 
     private fun launchWebView(article: Article) {
-        if (InternetCheck() == true) {
+        if (internetCheck() == true) {
             val intent = Intent(requireContext(), WebViewActivity::class.java)
-            intent.putExtra("url", article.url)
+            intent.putExtra(Constants.URL_LABEL, article.url)
             this.startActivity(intent)
         }
     }
 
-    private fun InternetCheck(): Boolean? {
+    private fun internetCheck(): Boolean? {
         val cm =
             requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
         val isConnected = activeNetwork?.isConnectedOrConnecting == true
-        if(!isConnected){
-            SnackBarUtils.showSnackBar("Internet Connection not available",fragmentHeadlineBinding.swipeRefreshLayout,requireContext())
+        if (!isConnected) {
+            SnackBarUtils.showSnackBar(
+                Constants.INTERNET_UNAVAILABLE,
+                fragmentHeadlineBinding.swipeRefreshLayout,
+                requireContext()
+            )
         }
         return isConnected
     }

@@ -39,7 +39,6 @@ class HeadlineViewModel : ViewModel(),IViewApiListener {
             }
     }
 
-
     override fun notifyViewOnSuccess(`object`: Any?, type: Int) {
         when (type) {
             0 -> {

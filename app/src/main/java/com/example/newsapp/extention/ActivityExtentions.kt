@@ -3,23 +3,19 @@ package com.example.newsapp.extention
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import androidx.biometric.BiometricManager
-import android.os.Build
-import android.util.Log
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import com.example.news.data.Article
+import com.example.newsapp.R
+import com.example.newsapp.core.Constants
 import com.example.newsapp.ui.bottomsheet.SettingBottomSheet
 
 fun Activity.showBottomSheet(
     fragmentManager: FragmentManager
 ) {
     val bottomSheet = SettingBottomSheet()
-    bottomSheet.show(fragmentManager, "BottomSheetEx")
+    bottomSheet.show(fragmentManager, Constants.BOTTOMSHEET_EX)
 }
 
 fun Activity.showDialog(
@@ -83,8 +79,8 @@ fun Activity.showBiometric(
         })
 
     val promptInfo = BiometricPrompt.PromptInfo.Builder()
-        .setTitle("To confirm fingerprint")
-        .setNegativeButtonText("Cancel")
+        .setTitle(getString(R.string.confirm_fingerprint))
+        .setNegativeButtonText(getString(R.string.cancel))
         .build()
 
     biometricPrompt.authenticate(promptInfo)

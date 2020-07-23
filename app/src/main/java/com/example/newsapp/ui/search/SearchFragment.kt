@@ -132,7 +132,7 @@ class SearchFragment : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let { result ->
                     queryKey = result
-                    if (InternetCheck() == true) {
+                    if (internetCheck() == true) {
                         searchViewModel.fetchSearchResult(result, page, sortBy, language)
                         val imm =
                             activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -170,7 +170,7 @@ class SearchFragment : Fragment() {
 
                 override fun saveArticle(position: Int) {
                     saveNews(mArticleList.get(position))
-                    SnackBarUtils.showSnackBar("News saved",searchBinding.rootSearch,requireContext())
+                    SnackBarUtils.showSnackBar(Constants.NEWS_SAVED,searchBinding.rootSearch,requireContext())
                 }
 
                 override fun deleteArticle(position: Int) {
@@ -203,9 +203,9 @@ class SearchFragment : Fragment() {
     }
 
     private fun launchWebView(article: Article) {
-        if (InternetCheck() == true) {
+        if (internetCheck() == true) {
             val intent = Intent(requireContext(), WebViewActivity::class.java)
-            intent.putExtra("url", article.url)
+            intent.putExtra(Constants.URL_LABEL, article.url)
             this.startActivity(intent)
         }
     }
@@ -213,7 +213,7 @@ class SearchFragment : Fragment() {
     private fun setPaging() {
         searchBinding.btnNext.setOnClickListener {
             if (totalData != null && page * 20 < totalData!!) {
-                if (InternetCheck() == true) {
+                if (internetCheck() == true) {
                     searchViewModel.fetchSearchResult(queryKey, ++page, sortBy, language)
                 }
             }
@@ -221,7 +221,7 @@ class SearchFragment : Fragment() {
 
         searchBinding.btnPrev.setOnClickListener {
             if (page > 1) {
-                if (InternetCheck() == true) {
+                if (internetCheck() == true) {
                     searchViewModel.fetchSearchResult(queryKey, --page, sortBy, language)
                 }
             }
@@ -229,7 +229,7 @@ class SearchFragment : Fragment() {
 
         searchBinding.btnFirst.setOnClickListener {
             if (page > 1) {
-                if (InternetCheck() == true) {
+                if (internetCheck() == true) {
                     page = 1
                     searchViewModel.fetchSearchResult(queryKey, page, sortBy, language)
                 }
@@ -238,7 +238,7 @@ class SearchFragment : Fragment() {
         searchBinding.btnLast.setOnClickListener {
             if (totalData != null) {
                 val pageLast = ceil((totalData!!.toDouble() / pageSize)).toInt()
-                if (InternetCheck() == true) {
+                if (internetCheck() == true) {
                     if (page < pageLast) {
                         page = pageLast
                         searchViewModel.fetchSearchResult(queryKey, page, sortBy, language)
@@ -267,14 +267,14 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun InternetCheck(): Boolean? {
+    private fun internetCheck(): Boolean? {
         val cm =
             requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
         val isConnected = activeNetwork?.isConnectedOrConnecting == true
         if (!isConnected) {
             SnackBarUtils.showSnackBar(
-                "Internet Connection not available",
+                Constants.INTERNET_UNAVAILABLE,
                 searchBinding.rootSearch,
                 requireContext()
             )

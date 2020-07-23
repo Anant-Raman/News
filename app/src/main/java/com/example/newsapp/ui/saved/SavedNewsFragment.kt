@@ -1,24 +1,22 @@
 package com.example.newsapp.ui.saved
 
 import android.content.Intent
-import android.os.Build
-import androidx.biometric.BiometricManager
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
+import androidx.biometric.BiometricManager
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.news.adapter.NewsArticleAdapter
 import com.example.news.data.Article
 import com.example.newsapp.R
 import com.example.newsapp.adapter.SavedNewsArticleAdapter
 import com.example.newsapp.callbacks.NewsCallbacks
+import com.example.newsapp.core.Constants
 import com.example.newsapp.databinding.FragmentSavedNewsBinding
 import com.example.newsapp.extention.showBiometric
 import com.example.newsapp.extention.showDialog
@@ -32,7 +30,7 @@ class SavedNewsFragment : Fragment() {
         fun newInstance() = SavedNewsFragment()
     }
 
-    private lateinit var fragmentSavedNewsBinding : FragmentSavedNewsBinding
+    private lateinit var fragmentSavedNewsBinding: FragmentSavedNewsBinding
     private lateinit var savedViewModel: SavedNewsViewModel
     private lateinit var articleToDelete: Article
 
@@ -41,7 +39,7 @@ class SavedNewsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         fragmentSavedNewsBinding =
-        DataBindingUtil.inflate(inflater, R.layout.fragment_saved_news, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_saved_news, container, false)
         savedViewModel = ViewModelProvider(this).get(SavedNewsViewModel::class.java)
         setUpActionBar()
         initViews()
@@ -55,11 +53,10 @@ class SavedNewsFragment : Fragment() {
             LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
     }
 
-    private fun setOnClick(){
+    private fun setOnClick() {
         fragmentSavedNewsBinding.deleteAllBtn.setOnClickListener {
             confirmDeleteAll()
         }
-
     }
 
     private fun observeData() {
@@ -73,7 +70,7 @@ class SavedNewsFragment : Fragment() {
                 }
 
                 override fun saveArticle(position: Int) {
-
+//                  DO NOTHING
                 }
 
                 override fun deleteArticle(position: Int) {
@@ -86,63 +83,83 @@ class SavedNewsFragment : Fragment() {
 
     }
 
-    private fun confirmDelete(article: Article){
+    private fun confirmDelete(article: Article) {
         activity?.let {
             articleToDelete = article
-            it.showDialog("Delete article?","Are you sure you want to delete this article?","Yes","No",onCancelled,onContinue)
+            it.showDialog(
+                Constants.DELETE_ONE,
+                Constants.DELETE_ONE_MESSAGE,
+                Constants.YES,
+                Constants.NO,
+                onCancelled,
+                onContinue
+            )
         }
     }
 
-    private fun confirmDeleteAll(){
+    private fun confirmDeleteAll() {
         activity?.let {
-            it.showDialog("Delete all articles?","Are you sure you want to delete all the articles? (Enable your fingerprint scanner for further security)","Yes","No",
-                onCancelled,onContinueDeleteAll as () -> Unit)
+            it.showDialog(
+                Constants.DELETE_ALL,
+                Constants.DELETE_ALL_MESSAGE,
+                Constants.YES,
+                Constants.NO,
+                onCancelled,
+                onContinueDeleteAll as () -> Unit
+            )
         }
     }
 
-    private var onContinue= {
+    private var onContinue = {
         deleteNews(articleToDelete)
     }
 
-    private var onContinueDeleteAll ={
+    private var onContinueDeleteAll = {
         val biometricManager = BiometricManager.from(requireContext())
         if (savedViewModel.canAuthenticate(biometricManager)) {
             activity?.let {
-                it.showBiometric(it,requireContext(),onAuthenticated,onCancelled)
+                it.showBiometric(it, requireContext(), onAuthenticated, onCancelled)
             }
-        }
-        else{
+        } else {
             deleteAll()
         }
     }
 
 
     private var onCancelled = {
-
+        //DO NOTHING
     }
 
     private var onAuthenticated = {
         deleteAll()
     }
 
-    private fun deleteNews(article: Article){
+    private fun deleteNews(article: Article) {
         savedViewModel.deleteNews(article)
-        SnackBarUtils.showSnackBar("Deleted",fragmentSavedNewsBinding.savedRoot,requireContext())
+        SnackBarUtils.showSnackBar(
+            Constants.DELETED,
+            fragmentSavedNewsBinding.savedRoot,
+            requireContext()
+        )
     }
 
-    private fun deleteAll(){
+    private fun deleteAll() {
         savedViewModel.deleteAll()
-        SnackBarUtils.showSnackBar("All articles deleted",fragmentSavedNewsBinding.savedRoot,requireContext())
+        SnackBarUtils.showSnackBar(
+            Constants.DELETED_ALL,
+            fragmentSavedNewsBinding.savedRoot,
+            requireContext()
+        )
     }
 
-    private fun launchWebView(article: Article){
+    private fun launchWebView(article: Article) {
         val intent = Intent(requireContext(), WebViewActivity::class.java)
-        intent.putExtra("url", article.url)
+        intent.putExtra(Constants.URL_LABEL, article.url)
         this.startActivity(intent)
     }
 
     private fun setUpActionBar() {
-        fragmentSavedNewsBinding.savedToolbar.title = "Saved News"
+        fragmentSavedNewsBinding.savedToolbar.title = Constants.SAVED_NEWS
     }
 }
 

@@ -48,14 +48,17 @@
 
 
             <RelativeLayout
+                android:id="@+id/category_paging_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="invisible">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_news"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginBottom="@dimen/dp_16"
                     android:nestedScrollingEnabled="false"
                     tools:itemCount="2"
                     tools:listitem="@layout/item_article" />
@@ -133,7 +136,7 @@
                     android:layout_marginStart="@dimen/dp_16"
                     android:layout_marginTop="@dimen/dp_16"
                     android:layout_marginEnd="@dimen/dp_16"
-                    android:layout_marginBottom="@dimen/dp_60"
+                    android:layout_marginBottom="@dimen/dp_16"
                     android:gravity="center_horizontal"
                     android:text="@string/powered_by_news_api"
                     android:textAlignment="center"

@@ -19,45 +19,45 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appBarLayout"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fitsSystemWindows="true"
+                android:layout_height="@dimen/dp_48"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_48"
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/headline_toolbar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toStartOf="@id/menu_btn"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:titleTextColor="@color/colorWhite" />
 
-                    <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/headline_toolbar"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintEnd_toStartOf="@id/menu_btn"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:titleTextColor="@color/colorWhite" />
-
-                    <ImageButton
-                        android:id="@+id/menu_btn"
-                        android:layout_width="@dimen/dp_48"
-                        android:layout_height="@dimen/dp_48"
-                        android:layout_marginEnd="@dimen/dp_8"
-                        android:background="@color/colorPrimary"
-                        android:contentDescription="@string/menu_options"
-                        android:src="@drawable/ic_baseline_menu_open_24"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <ImageButton
+                    android:id="@+id/menu_btn"
+                    android:layout_width="@dimen/dp_48"
+                    android:layout_height="@dimen/dp_48"
+                    android:layout_marginEnd="@dimen/dp_8"
+                    android:background="@color/colorPrimary"
+                    android:contentDescription="@string/menu_options"
+                    android:src="@drawable/ic_baseline_menu_open_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </com.google.android.material.appbar.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
@@ -76,14 +76,18 @@
                 app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
                 <RelativeLayout
+                    android:id="@+id/paging_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible">
+
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_news"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_8"
+                        android:layout_marginBottom="@dimen/dp_16"
                         android:nestedScrollingEnabled="false"
                         tools:itemCount="2"
                         tools:listitem="@layout/item_article" />
@@ -158,10 +162,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/btn_prev"
-                        android:layout_marginStart="@dimen/dp_16"
+                        android:layout_marginStart="@dimen/dp_12"
                         android:layout_marginTop="@dimen/dp_16"
                         android:layout_marginEnd="@dimen/dp_16"
-                        android:layout_marginBottom="@dimen/dp_60"
+                        android:layout_marginBottom="@dimen/dp_16"
                         android:gravity="center_horizontal"
                         android:text="@string/powered_by_news_api"
                         android:textAlignment="center"

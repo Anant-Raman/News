@@ -185,6 +185,7 @@ class HeadlineFragment : Fragment() {
             )
             rv_news.adapter = newsArticleAdapter
             setPaging()
+            fragmentHeadlineBinding.pagingLayout.visibility = View.VISIBLE
         })
         if (internetCheck() == true) {
             headlineViewModel.fetchHeadline(country, 1)

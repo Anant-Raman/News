@@ -95,6 +95,7 @@ class CategoryFragment : Fragment() {
             })
             rv_news.adapter = newsArticleAdapter
             setPaging()
+            fragmentCategoryBinding.categoryPagingLayout.visibility = View.VISIBLE
         })
 
         categoryViewModel.state.observe(viewLifecycleOwner, Observer { state ->

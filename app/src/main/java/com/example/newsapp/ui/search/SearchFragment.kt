@@ -179,6 +179,7 @@ class SearchFragment : Fragment() {
             })
             rv_news.adapter = newsArticleAdapter
             setPaging()
+            searchBinding.searchPagingLayout.visibility = View.VISIBLE
         })
         searchViewModel.state.observe(viewLifecycleOwner, Observer { state ->
             when (state) {

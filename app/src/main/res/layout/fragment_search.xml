@@ -41,21 +41,21 @@
                     android:padding="@dimen/dp_8"
                     android:queryHint="@string/search"
                     android:theme="@style/DarkSearchView"
-                    app:layout_constraintEnd_toEndOf="@id/btn_search"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <Button
-                    android:id="@+id/btn_search"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorPrimary"
-                    android:padding="@dimen/dp_8"
-                    android:text="@string/search"
-                    android:textColor="@color/colorWhite"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+<!--                <Button-->
+<!--                    android:id="@+id/btn_search"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:background="@color/colorPrimary"-->
+<!--                    android:padding="@dimen/dp_8"-->
+<!--                    android:text="@string/search"-->
+<!--                    android:textColor="@color/colorWhite"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -99,15 +99,17 @@
 
 
             <RelativeLayout
+                android:id="@+id/search_paging_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:visibility="invisible">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_news"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_8"
-                    android:layout_marginBottom="@dimen/dp_40"
+                    android:layout_marginBottom="@dimen/dp_16"
                     android:nestedScrollingEnabled="false"
                     tools:itemCount="2"
                     tools:listitem="@layout/item_article" />
@@ -185,7 +187,7 @@
                     android:layout_marginStart="@dimen/dp_16"
                     android:layout_marginTop="@dimen/dp_16"
                     android:layout_marginEnd="@dimen/dp_16"
-                    android:layout_marginBottom="@dimen/dp_60"
+                    android:layout_marginBottom="@dimen/dp_16"
                     android:gravity="center_horizontal"
                     android:text="@string/powered_by_news_api"
                     android:textAlignment="center"

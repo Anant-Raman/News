@@ -8,6 +8,7 @@ import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.newsapp.R
+import com.example.newsapp.core.Constants
 import com.example.newsapp.databinding.ActivityWebViewBinding
 
 class WebViewActivity : AppCompatActivity() {
@@ -33,11 +34,11 @@ class WebViewActivity : AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     private fun initViews() {
 
-        activityWebViewBinding.toolbarWebView.title = "News App"
+        activityWebViewBinding.toolbarWebView.title = Constants.NEWS_APP
         activityWebViewBinding.toolbarWebView.setOnClickListener {
             onBackPressed()
         }
-        url = intent.getStringExtra("url")!!
+        url = intent.getStringExtra(Constants.URL_LABEL)!!
 
         activityWebViewBinding.webView.settings.loadWithOverviewMode = true
         activityWebViewBinding.webView.settings.useWideViewPort = true

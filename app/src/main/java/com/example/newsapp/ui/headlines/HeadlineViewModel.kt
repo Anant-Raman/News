@@ -1,10 +1,7 @@
-package com.example.newsapp.ui.headlines.viewmodel
+package com.example.newsapp.ui.headlines
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
-import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.news.data.Article
@@ -12,14 +9,16 @@ import com.example.news.data.NewsData
 import com.example.newsapp.core.MainApplication
 import com.example.newsapp.database.ArticleRepository
 import com.example.newsapp.database.ArticleRoomDatabase
-import com.globallogic.sampleapp.framework.network.IViewApiListener
-import com.globallogic.sampleapp.framework.network.RestApiService
+import com.example.newsapp.network.IViewApiListener
+import com.example.newsapp.network.RestApiService
 
-class HeadlineViewModel : ViewModel(),IViewApiListener {
+class HeadlineViewModel() : ViewModel(), IViewApiListener, Parcelable {
 
     var headline: MutableLiveData<NewsData> = MutableLiveData()
-    var state : MutableLiveData<String> = MutableLiveData()
+    var state: MutableLiveData<String> = MutableLiveData()
     private val repository: ArticleRepository
+
+    constructor(parcel: Parcel) : this()
 
     init {
         val articleDao =
@@ -27,9 +26,9 @@ class HeadlineViewModel : ViewModel(),IViewApiListener {
         repository = ArticleRepository(articleDao)
     }
 
-    fun fetchHeadline(country : String,page: Int) {
+    fun fetchHeadline(country: String, page: Int) {
         val service = RestApiService()
-        service.getHeadlines(this,page,country, state)
+        service.getHeadlines(this, page, country, state)
     }
 
     fun saveNews(article: Article) {
@@ -53,6 +52,24 @@ class HeadlineViewModel : ViewModel(),IViewApiListener {
             0 -> {
                 headline.postValue(null)
             }
+        }
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<HeadlineViewModel> {
+        override fun createFromParcel(parcel: Parcel): HeadlineViewModel {
+            return HeadlineViewModel(parcel)
+        }
+
+        override fun newArray(size: Int): Array<HeadlineViewModel?> {
+            return arrayOfNulls(size)
         }
     }
 }

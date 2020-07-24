@@ -1,7 +1,5 @@
 package com.example.newsapp.ui.search
 
-import android.graphics.pdf.PdfDocument
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.news.data.Article
@@ -9,10 +7,10 @@ import com.example.news.data.NewsData
 import com.example.newsapp.core.MainApplication
 import com.example.newsapp.database.ArticleRepository
 import com.example.newsapp.database.ArticleRoomDatabase
-import com.globallogic.sampleapp.framework.network.IViewApiListener
-import com.globallogic.sampleapp.framework.network.RestApiService
+import com.example.newsapp.network.IViewApiListener
+import com.example.newsapp.network.RestApiService
 
-class SearchViewModel : ViewModel(),IViewApiListener {
+class SearchViewModel : ViewModel(), IViewApiListener {
 
     var searchResult: MutableLiveData<NewsData> = MutableLiveData()
     var state: MutableLiveData<String> = MutableLiveData()
@@ -24,19 +22,19 @@ class SearchViewModel : ViewModel(),IViewApiListener {
         repository = ArticleRepository(articleDao)
     }
 
-    fun fetchSearchResult(searchKey : String,page: Int, sortBy : String, language : String) {
+    fun fetchSearchResult(searchKey: String, page: Int, sortBy: String, language: String) {
         val service = RestApiService()
-        service.getSearchResult(searchKey, page, sortBy,language,this, state)
+        service.getSearchResult(searchKey, page, sortBy, language, this, state)
     }
 
-    fun saveNews(article: Article){
+    fun saveNews(article: Article) {
         MainApplication.getExecutors()?.diskIO()
             ?.execute {
                 repository.insert(article)
             }
     }
 
-    fun initSortList() : ArrayList<String> {
+    fun initSortList(): ArrayList<String> {
         val sortByList = arrayListOf<String>()
         sortByList.add("publishedAt")
         sortByList.add("relevancy")
@@ -44,7 +42,7 @@ class SearchViewModel : ViewModel(),IViewApiListener {
         return sortByList
     }
 
-    fun initSortListLabel() : ArrayList<String>{
+    fun initSortListLabel(): ArrayList<String> {
 
         val sortByListLabel = arrayListOf<String>()
         sortByListLabel.add("Publication Date")
@@ -53,7 +51,7 @@ class SearchViewModel : ViewModel(),IViewApiListener {
         return sortByListLabel
     }
 
-    fun initLanguageList() : ArrayList<String>{
+    fun initLanguageList(): ArrayList<String> {
 
         val languageList = arrayListOf<String>()
         languageList.add("en")
@@ -72,7 +70,7 @@ class SearchViewModel : ViewModel(),IViewApiListener {
         return languageList
     }
 
-    fun initLanguageLabelList() : ArrayList<String>{
+    fun initLanguageLabelList(): ArrayList<String> {
 
         val languageLabelList = arrayListOf<String>()
         languageLabelList.add("All")
@@ -90,6 +88,7 @@ class SearchViewModel : ViewModel(),IViewApiListener {
 
         return languageLabelList
     }
+
     override fun notifyViewOnSuccess(`object`: Any?, type: Int) {
         when (type) {
             0 -> {

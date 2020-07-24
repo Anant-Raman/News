@@ -1,6 +1,5 @@
-package com.globallogic.sampleapp.framework.network
+package com.example.newsapp.network
 
-import android.util.Log
 import com.example.newsapp.BuildConfig
 import okhttp3.CacheControl
 import okhttp3.Interceptor

@@ -1,4 +1,4 @@
-package com.example.newsapp.ui.headlines.view
+package com.example.newsapp.ui.headlines
 
 import android.content.Context
 import android.content.Intent
@@ -19,7 +19,6 @@ import com.example.newsapp.callbacks.NewsCallbacks
 import com.example.newsapp.core.Constants
 import com.example.newsapp.databinding.FragmentHeadlineBinding
 import com.example.newsapp.extention.showBottomSheet
-import com.example.newsapp.ui.headlines.viewmodel.HeadlineViewModel
 import com.example.newsapp.ui.webview.WebViewActivity
 import com.example.newsapp.utility.SharedPreferences
 import com.example.newsapp.utility.SnackBarUtils

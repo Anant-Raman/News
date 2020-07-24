@@ -1,9 +1,8 @@
-package com.globallogic.sampleapp.framework.network
+package com.example.newsapp.network
 
 import androidx.lifecycle.MutableLiveData
 import com.example.news.data.NewsData
 import com.example.newsapp.core.Constants
-import com.example.newsapp.network.RestApi
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

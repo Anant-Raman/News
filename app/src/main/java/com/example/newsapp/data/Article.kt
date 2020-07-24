@@ -22,7 +22,7 @@ data class Article(
 
     @SerializedName("description")
     @Expose
-    val description : String?,
+    val description: String?,
 
     @SerializedName("url")
     @Expose

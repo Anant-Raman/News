@@ -1,6 +1,5 @@
 package com.example.newsapp.ui.category
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.news.data.Article
@@ -8,8 +7,8 @@ import com.example.news.data.NewsData
 import com.example.newsapp.core.MainApplication
 import com.example.newsapp.database.ArticleRepository
 import com.example.newsapp.database.ArticleRoomDatabase
-import com.globallogic.sampleapp.framework.network.IViewApiListener
-import com.globallogic.sampleapp.framework.network.RestApiService
+import com.example.newsapp.network.IViewApiListener
+import com.example.newsapp.network.RestApiService
 
 class CategoryViewModel : ViewModel(), IViewApiListener {
 

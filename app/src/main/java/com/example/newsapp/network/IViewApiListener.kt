@@ -1,4 +1,4 @@
-package com.globallogic.sampleapp.framework.network
+package com.example.newsapp.network
 
 interface IViewApiListener {
 

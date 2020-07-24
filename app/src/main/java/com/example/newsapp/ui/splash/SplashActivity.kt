@@ -2,7 +2,6 @@ package com.example.newsapp.ui.splash
 
 
 import android.content.Intent
-import android.content.Intent.getIntent
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +19,7 @@ class SplashActivity : AppCompatActivity() {
 
     }
 
-    private fun startApp(){
+    private fun startApp() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()

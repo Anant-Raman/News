@@ -21,6 +21,7 @@ object Constants {
     const val INDIA = "in"
 
     //MESSAGES
+    const val NEWS_APP = "News App"
     const val NEWS_SAVED = "News saved"
     const val OF = " of "
     const val INTERNET_UNAVAILABLE = "Internet Connection is not available"

@@ -1,10 +1,8 @@
 package com.example.newsapp.utility
 
-import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 
-object SharedPreferences{
+object SharedPreferences {
 
     private val PREFS_NAME = "SharedPreferences"
 

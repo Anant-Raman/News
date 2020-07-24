@@ -6,5 +6,5 @@ interface NewsCallbacks {
 
     fun saveArticle(position: Int)
 
-    fun deleteArticle(position : Int)
+    fun deleteArticle(position: Int)
 }

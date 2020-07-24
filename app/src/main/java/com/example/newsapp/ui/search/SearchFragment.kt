@@ -170,7 +170,11 @@ class SearchFragment : Fragment() {
 
                 override fun saveArticle(position: Int) {
                     saveNews(mArticleList.get(position))
-                    SnackBarUtils.showSnackBar(Constants.NEWS_SAVED,searchBinding.rootSearch,requireContext())
+                    SnackBarUtils.showSnackBar(
+                        Constants.NEWS_SAVED,
+                        searchBinding.rootSearch,
+                        requireContext()
+                    )
                 }
 
                 override fun deleteArticle(position: Int) {
@@ -257,7 +261,9 @@ class SearchFragment : Fragment() {
         }
         if (totalData != null) {
             val pageLast = ceil((totalData!!.toDouble() / pageSize)).toInt()
-            searchBinding.pageNumber = page.toString().plus(" of ").plus(pageLast)
+            if (pageLast > 0) {
+                searchBinding.pageNumber = page.toString().plus(" of ").plus(pageLast)
+            }
             if (page == pageLast) {
                 searchBinding.btnLast.alpha = .5f
                 searchBinding.btnNext.alpha = .5f

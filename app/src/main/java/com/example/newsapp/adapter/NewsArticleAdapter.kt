@@ -1,12 +1,9 @@
 package com.example.news.adapter
 
 import android.content.Context
-import android.content.Intent
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -17,10 +14,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.news.data.Article
 import com.example.newsapp.R
 import com.example.newsapp.callbacks.NewsCallbacks
-import com.example.newsapp.ui.webview.WebViewActivity
 
-class NewsArticleAdapter(private val mArticleList: List<Article>,
-                         private val newsCallbacks: NewsCallbacks) :
+class NewsArticleAdapter(
+    private val mArticleList: List<Article>,
+    private val newsCallbacks: NewsCallbacks
+) :
     RecyclerView.Adapter<NewsArticleAdapter.ViewHolder>() {
 
     private lateinit var mContext: Context
@@ -45,11 +43,14 @@ class NewsArticleAdapter(private val mArticleList: List<Article>,
         holder.title.text = mArticleList.get(position).title
         if (mArticleList.get(position).description != null)
             holder.description.text = mArticleList.get(position).description.toString()
-        if(mArticleList.get(position).publishedAt!=null)
-            holder.published.text = mArticleList.get(position).publishedAt
-        if(mArticleList.get(position).source!!.name!=null)
+        if (mArticleList.get(position).publishedAt != null) {
+            val time = mArticleList.get(position).publishedAt
+            holder.published.text = time!!.substring(0, time.indexOf('T')).plus("   ")
+                .plus(time.substring(time.indexOf('T') + 1, time.indexOf('Z')))
+        }
+        if (mArticleList.get(position).source!!.name != null)
             holder.source.text = mArticleList.get(position).source!!.name
-        if(mArticleList.get(position).url!=null)
+        if (mArticleList.get(position).url != null)
             holder.card.setOnClickListener {
                 newsCallbacks.launchNewsWebView(position)
             }
@@ -65,6 +66,6 @@ class NewsArticleAdapter(private val mArticleList: List<Article>,
         val published: TextView = itemView.findViewById(R.id.tv_published)
         val source: TextView = itemView.findViewById(R.id.tv_source)
         val card: CardView = itemView.findViewById(R.id.card_article)
-        val btnSave : ImageButton = itemView.findViewById(R.id.btn_save)
+        val btnSave: ImageButton = itemView.findViewById(R.id.btn_save)
     }
 }

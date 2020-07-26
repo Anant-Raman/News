@@ -25,7 +25,6 @@ object Constants {
     const val NEWS_SAVED = "News saved"
     const val OF = " of "
     const val INTERNET_UNAVAILABLE = "Internet Connection is not available"
-    const val SELECT_NEWS_CATEGORY = "Select news category "
     const val HEADLINE = "Headlines"
     const val SAVED_NEWS = "Saved News"
     const val DELETED_ALL = "All articles deleted"
@@ -40,7 +39,11 @@ object Constants {
     const val CAN_AUTHENTICATE = "App can authenticate using biometrics."
     const val NO_BIOMETRICS_ON_DEVICE = "No biometric features available on this device."
     const val BIOMETRICS_UNAVAILABLE = "Biometric features are currently unavailable."
-    const val NOT_ASSOCIATED_BIOMETRICS= "The user hasn't associated any biometric credentials with their account."
+    const val NOT_ASSOCIATED_BIOMETRICS =
+        "The user hasn't associated any biometric credentials with their account."
+    const val SOURCES = "Sources"
+    const val BY_COUNTRY = "By countries"
+    const val BY_CATEGORY = "By Categories"
 
     //URLS
     const val URL_LINKEDIN = "https://www.linkedin.com/in/anantramanindia/"

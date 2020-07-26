@@ -1,106 +1,39 @@
-package com.example.newsapp.ui.bottomsheet
+package com.example.newsapp.ui.source.bycountry
 
-import android.content.Intent
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
-import com.example.newsapp.R
-import com.example.newsapp.core.Constants
-import com.example.newsapp.ui.source.views.SourceActivity
-import com.example.newsapp.ui.webview.WebViewActivity
-import com.example.newsapp.utility.SharedPreferences
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import de.hdodenhof.circleimageview.CircleImageView
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.example.news.data.SourceData
+import com.example.newsapp.network.IViewApiListener
+import com.example.newsapp.network.RestApiService
 
-class SettingBottomSheet : BottomSheetDialogFragment() {
+class SourcesByCountryViewModel : ViewModel(), IViewApiListener {
 
-    private lateinit var countryList: ArrayList<String>
-    private lateinit var countryLabelList: ArrayList<String>
-    private lateinit var countrySpinner: Spinner
-    private lateinit var civGithub: CircleImageView
-    private lateinit var civLinkedin: CircleImageView
-    private lateinit var btnSource: Button
+    var sources: MutableLiveData<SourceData?> = MutableLiveData()
+    var state: MutableLiveData<String> = MutableLiveData()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val root = inflater.inflate(R.layout.fragment_setting_bottom_sheet, container, false)
-        initSpinner(root)
-        initWebView(root)
-        return root
+    fun fetchSourceByCategory(country: String) {
+        val service = RestApiService()
+        service.getSourceByCountry(country, this, state)
     }
 
-    fun initSpinner(view: View) {
-        countrySpinner = view.findViewById(R.id.setCountrySpinner)
-        btnSource = view.findViewById(R.id.btn_sources)
-        countryList = initCountryList()
-        countryLabelList = initCountryLabelList()
-
-        btnSource.setOnClickListener {
-            activity?.let {
-                val intent = Intent(it, SourceActivity::class.java)
-                it.startActivity(intent)
+    override fun notifyViewOnSuccess(`object`: Any?, type: Int) {
+        when (type) {
+            0 -> {
+                val response: SourceData = `object` as SourceData
+                sources.postValue(response)
             }
         }
-        val adapter = ArrayAdapter(
-            requireActivity().applicationContext,
-            android.R.layout.simple_spinner_dropdown_item,
-            countryLabelList
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        countrySpinner.adapter = adapter
+    }
 
-        countrySpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    
-                }
-
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    if(position>0) {
-                        SharedPreferences.StoreStringSharedPref(
-                            Constants.COUNTRY,
-                            countryList.get(position),
-                            requireContext()
-                        )
-                    }
-                }
+    override fun notifyViewOnFailure(`object`: Any?, type: Int) {
+        when (type) {
+            0 -> {
+                sources.postValue(null)
             }
-    }
-
-    fun initWebView(view: View) {
-        civGithub = view.findViewById(R.id.civ_github)
-        civLinkedin = view.findViewById(R.id.civ_linkedIn)
-
-        civGithub.setOnClickListener {
-            launchWebView(Constants.URL_GITHUB)
         }
-
-        civLinkedin.setOnClickListener {
-            launchWebView(Constants.URL_LINKEDIN)
-        }
-
     }
 
-    private fun launchWebView(urlWeb: String) {
-        val intent = Intent(requireContext(), WebViewActivity::class.java)
-        intent.putExtra(Constants.URL_LABEL, urlWeb)
-        this.startActivity(intent)
-    }
-
-    private fun initCountryList(): ArrayList<String> {
+    fun initCountryList(): ArrayList<String> {
 
         val conList = arrayListOf<String>()
         conList.add("")
@@ -162,7 +95,7 @@ class SettingBottomSheet : BottomSheetDialogFragment() {
         return conList
     }
 
-    private fun initCountryLabelList(): ArrayList<String> {
+    fun initCountryLabelList(): ArrayList<String> {
 
         val countryLabelList = arrayListOf<String>()
         countryLabelList.add(("Select your country"))

@@ -1,6 +1,8 @@
 package com.example.newsapp.network
 
 import com.example.newsapp.BuildConfig
+import dagger.Module
+import dagger.Provides
 import okhttp3.CacheControl
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -9,7 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-
+@Module
 class RestApiBuilder {
     private  val CACHE_CONTROL = "Cache-Control"
     private val LOGIN = 0
@@ -20,11 +22,16 @@ class RestApiBuilder {
 
     private val mBaseApiRetrofit: Retrofit = provideRetrofit(BASE_API)
 
-    private fun provideRetrofit(baseUrl: String): Retrofit {
+    fun provideRetrofit(baseUrl: String): Retrofit {
         return Retrofit.Builder().baseUrl(baseUrl)
             .client(provideOkHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
+
+    @Provides
+    fun provideRestApiBuilder(): RestApiBuilder {
+        return this
     }
 
     private fun provideOkHttpClient(): OkHttpClient? {
@@ -61,15 +68,16 @@ class RestApiBuilder {
                 .build()
         }
     }
+
     fun <T> getNetworkService(service: Class<T>?): T {
         return mBaseApiRetrofit.create(service!!)
     }
 
-    fun <T> getNetworkService(service: Class<T>?, type: Int): T {
-        return when (type) {
-            LOGIN -> mBaseApiRetrofit.create(service!!)
-            else -> mBaseApiRetrofit.create(service!!)
-        }
-    }
+//    fun <T> getNetworkService(service: Class<T>?, type: Int): T {
+//        return when (type) {
+//            LOGIN -> mBaseApiRetrofit.create(service!!)
+//            else -> mBaseApiRetrofit.create(service!!)
+//        }
+//    }
 
 }

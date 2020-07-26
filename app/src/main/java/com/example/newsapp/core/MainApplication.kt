@@ -2,8 +2,17 @@ package com.example.newsapp.core
 
 import android.app.Application
 import android.content.Context
+import com.example.newsapp.di.ApplicationComponent
+import com.example.newsapp.di.DaggerApplicationComponent
+import com.example.newsapp.network.RestApiBuilder
+import javax.inject.Inject
 
 class MainApplication : Application() {
+
+    private var applicationComponent: ApplicationComponent? = null
+
+    @Inject
+    lateinit var restApiBuilder: RestApiBuilder
 
     override fun onCreate() {
         super.onCreate()
@@ -11,7 +20,12 @@ class MainApplication : Application() {
 
         // Use ApplicationContext.
         // example: SharedPreferences etc...
-        val context: Context = MainApplication.applicationContext()
+
+        MainApplication.application = this
+        applicationComponent = DaggerApplicationComponent.create()
+        applicationComponent?.injectApplication(this)
+
+        //val context: Context = MainApplication.applicationContext()
     }
 
     init {
@@ -23,9 +37,15 @@ class MainApplication : Application() {
         private var instance: MainApplication? = null
         private var mAppExecutors: AppExecutors? = null
 
-        fun applicationContext() : Context {
+        private lateinit var application: MainApplication
+        fun getApplication(): MainApplication {
+            return application
+        }
+
+        fun applicationContext(): Context {
             return instance!!.applicationContext
         }
+
         fun getExecutors(): AppExecutors? {
             return mAppExecutors
         }

@@ -118,7 +118,6 @@ class CategoryFragment : Fragment() {
 
     private fun initSpinner() {
         Collections.sort(categoryList)
-        categoryList.add(0, Constants.SELECT_NEWS_CATEGORY)
         val adapter = ArrayAdapter(
             requireActivity().applicationContext,
             android.R.layout.simple_spinner_dropdown_item,
@@ -140,17 +139,15 @@ class CategoryFragment : Fragment() {
                     id: Long
                 ) {
                     (view as TextView).setTextColor(Color.WHITE)
-                    (view).setTextSize(18f)
-                    if (position > 0) {
-                        page = 1
-                        categoty = categoryList[position]
-                        if (internetCheck() == true) {
-                            categoryViewModel.fetchCategoryHeadline(
-                                countryCat,
-                                page,
-                                categoryList.get(position)
-                            )
-                        }
+                    (view).textSize = 18f
+                    page = 1
+                    categoty = categoryList[position]
+                    if (internetCheck() == true) {
+                        categoryViewModel.fetchCategoryHeadline(
+                            countryCat,
+                            page,
+                            categoryList.get(position)
+                        )
                     }
                 }
             }

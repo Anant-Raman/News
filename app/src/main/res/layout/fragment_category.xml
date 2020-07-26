@@ -31,7 +31,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_16"
                 android:layout_marginEnd="@dimen/dp_16"
-                android:padding="@dimen/dp_4"
                 android:textSize="@dimen/sp_20"
                 android:theme="@style/SpinnerTheme"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -32,4 +32,10 @@
     <string name="confirm_fingerprint">Confirm fingerprint</string>
     <string name="cancel">Cancel</string>
     <string name="news_app">NEWS APP</string>
+    <string name="category">Category</string>
+    <string name="url">URL</string>
+    <string name="language">Language</string>
+    <string name="nationality">Nationality</string>
+    <string name="no_available_sources_in_the_selected_country">No available sources in the selected country</string>
+    <string name="check_our_sources">Check our sources</string>
 </resources>

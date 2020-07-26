@@ -93,7 +93,6 @@ class HeadlineFragment : Fragment() {
     }
 
     private fun setPaging() {
-
         fragmentHeadlineBinding.btnNext.setOnClickListener {
             if (totalData != null && page * 20 < totalData!!) {
                 if (internetCheck() == true) {

@@ -9,12 +9,11 @@ import com.example.newsapp.adapter.ViewPagerAdapter
 import com.example.newsapp.core.Constants
 import com.example.newsapp.databinding.ActivitySourceBinding
 import com.example.newsapp.ui.MainActivity
-import com.example.newsapp.ui.source.viewmodel.SourceViewModel
+import com.example.newsapp.utility.ZoomOutPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
 
 class SourceActivity : AppCompatActivity() {
 
-    private lateinit var sourceViewModel: SourceViewModel
     private lateinit var sourceBinding: ActivitySourceBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +28,7 @@ class SourceActivity : AppCompatActivity() {
 
     private fun initViews() {
         sourceBinding.pager.isUserInputEnabled = true
+        sourceBinding.pager.setPageTransformer(ZoomOutPageTransformer())
         sourceBinding.pager.adapter =
             ViewPagerAdapter(
                 supportFragmentManager,

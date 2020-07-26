@@ -62,6 +62,23 @@ class AllSourcesFragment : Fragment() {
         if (internetCheck() == true) {
             allSourcesViewModel.fetchAllSource()
         }
+
+        allSourcesViewModel.state.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                Constants.STATUS_START -> {
+                    allSourcesBinding.allSourceProgbar.visibility = View.VISIBLE
+                }
+                Constants.STATUS_LOADED -> {
+                    allSourcesBinding.allSourceProgbar.visibility = View.INVISIBLE
+                }
+                Constants.STATUS_FAILED -> {
+                    allSourcesBinding.allSourceProgbar.visibility = View.INVISIBLE
+                }
+                Constants.STATUS_NODATA -> {
+                    allSourcesBinding.allSourceProgbar.visibility = View.INVISIBLE
+                }
+            }
+        })
     }
 
     private fun launchWebView(source: SourceData.SourcesList) {

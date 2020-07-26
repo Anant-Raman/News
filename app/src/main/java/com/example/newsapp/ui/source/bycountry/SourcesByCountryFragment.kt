@@ -109,15 +109,31 @@ class SourcesByCountryFragment : Fragment() {
                 sourcesByCountryBinding.rvSource.adapter = sourceAdapter
             }
         })
+        sourcesByCountryViewModel.state.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                Constants.STATUS_START -> {
+                    sourcesByCountryBinding.countrySourceProgbar.visibility = View.VISIBLE
+                }
+                Constants.STATUS_LOADED -> {
+                    sourcesByCountryBinding.countrySourceProgbar.visibility = View.INVISIBLE
+                }
+                Constants.STATUS_FAILED -> {
+                    sourcesByCountryBinding.countrySourceProgbar.visibility = View.INVISIBLE
+                }
+                Constants.STATUS_NODATA -> {
+                    sourcesByCountryBinding.countrySourceProgbar.visibility = View.INVISIBLE
+                }
+            }
+        })
     }
 
     private fun launchWebView(source: SourceData.SourcesList) {
-//        if (internetCheck() == true) {
-        val intent = Intent(requireContext(), WebViewActivity::class.java)
-        intent.putExtra(Constants.URL_LABEL, source.url)
-        this.startActivity(intent)
+        if (internetCheck() == true) {
+            val intent = Intent(requireContext(), WebViewActivity::class.java)
+            intent.putExtra(Constants.URL_LABEL, source.url)
+            this.startActivity(intent)
+        }
     }
-//    }
 
     private fun internetCheck(): Boolean? {
         val cm =

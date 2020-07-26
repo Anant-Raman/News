@@ -29,7 +29,7 @@
     <string name="next_last">Next Last</string>
     <string name="next_button">Next Button</string>
     <string name="last_button">Last Button</string>
-    <string name="confirm_fingerprint">Confirm fingerprint</string>
+    <string name="confirm_fingerprint">Confirm fingerprint to delete all</string>
     <string name="cancel">Cancel</string>
     <string name="news_app">NEWS APP</string>
     <string name="category">Category</string>

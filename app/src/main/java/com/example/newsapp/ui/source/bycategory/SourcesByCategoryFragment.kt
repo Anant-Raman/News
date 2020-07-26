@@ -101,6 +101,22 @@ class SourcesByCategoryFragment : Fragment() {
                 sourcesByCategoryBinding.rvSource.adapter = sourceAdapter
             }
         })
+        sourcesByCategoryViewModel.state.observe(viewLifecycleOwner, Observer { state ->
+            when (state) {
+                Constants.STATUS_START -> {
+                    sourcesByCategoryBinding.categorySourceProgbar.visibility = View.VISIBLE
+                }
+                Constants.STATUS_LOADED -> {
+                    sourcesByCategoryBinding.categorySourceProgbar.visibility = View.INVISIBLE
+                }
+                Constants.STATUS_FAILED -> {
+                    sourcesByCategoryBinding.categorySourceProgbar.visibility = View.INVISIBLE
+                }
+                Constants.STATUS_NODATA -> {
+                    sourcesByCategoryBinding.categorySourceProgbar.visibility = View.INVISIBLE
+                }
+            }
+        })
     }
 
     private fun launchWebView(source: SourceData.SourcesList) {
